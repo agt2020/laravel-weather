@@ -113,3 +113,9 @@ body{
 .row{
     overflow: visible;
 }
+#boxweather
+{
+    width: 600px;
+    width: fit-content;
+    display: flex;
+}

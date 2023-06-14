@@ -18,17 +18,22 @@ function fetchAPI(url)
     .then(data => {
         $('#boxweather').empty();
         let list = data.list;
-        for (let i = 0; i < list.length; i++)
+        for (let i = 0; i < 5; i++)
         {
-
             let mainData = list[i].main;
             let weather = list[i].weather;
-            let weatherIcon = icon(weather[0].description);
-
-            let boxBody = '<div class="col-md-3">';
-            boxBody += '<div class="row row1">'+mainData.temp+'&deg;</div>';
-            boxBody += '<div class="row row2"><img class="img-fluid" src="'+weatherIcon+'" /></div>';
-            boxBody += '<div class="row row3">'+list[i].dt_txt+'</div>';
+            let Temp = Math.round(mainData.temp/10);
+            let dateTime = new Date(list[i].dt_txt);
+            let Hours = getTime(dateTime);
+            // if(!isToday(dateTime))
+            //     continue;
+            let seperator = (i < 4) ? 'seperator' : '';
+            // TIME WEATHER
+            let boxBody = '';
+            boxBody += '<div class="day '+seperator+'">';
+            boxBody += '    <div class="row row1"><img class="img-fluid" src="'+icon(weather[0].icon)+'" /></div>';
+            boxBody += '    <div class="row row2">'+Hours+'</div>';
+            boxBody += '    <div class="row row3">'+Temp+'&deg;</div>';
             boxBody += '</div>';
             // APPEND
             $('#boxweather').append(boxBody);
@@ -39,26 +44,28 @@ function fetchAPI(url)
     })
 }
 
-function icon(params = 'clear sky', time = 'd')
+function icon(icon, size = '2x')
 {
-    // DAY OR NIGHT
-    const hr = (new Date()).getHours();
-    if(hr > 17)
-    {
-        time = 'n';
-    }
-    // ICONS
-    const icons = {
-        'clear sky': '01',
-        'few clouds': '02',
-        'scattered clouds': '03',
-        'broken clouds': '04',
-        'shower rain': '09',
-        'rain': '10',
-        'thunderstorm': '11',
-        'snow': '13',
-        'mist': '50'
-    };
+    return "https://openweathermap.org/img/wn/"+icon+"@"+size+".png";
+}
 
-    return "https://openweathermap.org/img/wn/"+(icons[params] ?? '01')+time+"@2x.png";
+function isToday(date)
+{
+    const today = new Date();
+    // Today's date
+    if (today.toDateString() === date.toDateString())
+    {
+        return true;
+    }
+    return false;
+}
+
+function getTime(dateTime)
+{
+    return new Intl.DateTimeFormat('default',
+    {
+        hour12: true,
+        hour: 'numeric',
+        minute: 'numeric'
+    }).format(dateTime);
 }
