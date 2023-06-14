@@ -1,15 +1,22 @@
-let lat = '52.520008';
-let lon = '13.404954';
-let url = 'api/fetch?lat='+lat+'&lon='+lon;
+/* BERLIN */
+// let lat = '52.520008';
+// let lon = '13.404954';
+/* TEHRAN */
+let lat = '35.7219';
+let lon = '51.3347';
+let url = getURL(lat,lon);
 
 window.addEventListener('load', fetchAPI(url));
 
-// FOR REFRESH DATA EVERY MIN
-/*
+// FOR REFRESH DATA EVERY 3 HOURS
 let fetchDataEvery = setInterval(function(){
     fetchAPI(url);
-}, 60000)
-*/
+}, 10800000);
+
+function getURL(lat,lon)
+{
+    return 'api/fetch?lat='+lat+'&lon='+lon;
+}
 
 function fetchAPI(url)
 {
@@ -22,7 +29,7 @@ function fetchAPI(url)
         {
             let mainData = list[i].main;
             let weather = list[i].weather;
-            let Temp = Math.round(mainData.temp/10);
+            let Temp = Math.round(mainData.temp);
             let dateTime = new Date(list[i].dt_txt);
             let Hours = getTime(dateTime);
             // if(!isToday(dateTime))

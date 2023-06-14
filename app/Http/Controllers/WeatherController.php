@@ -29,7 +29,7 @@ class WeatherController extends Controller
             return $this->fail('Lat and Lon are Required !', 400);
         }
         // FETCH DATA
-        $response = file_get_contents("{$this->apiUrl}?lat={$lat}&lon={$lon}&appid={$this->key}");
+        $response = file_get_contents("{$this->apiUrl}?units=metric&lat={$lat}&lon={$lon}&appid={$this->key}");
 
         return json_decode($response, true);
     }
